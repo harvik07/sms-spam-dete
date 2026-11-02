@@ -51,3 +51,17 @@ def verdict_card(text: str, prediction: Prediction) -> str:
       </div>
     </div>
     """
+
+
+def stat_row(metrics: dict) -> str:
+    stats = [
+        (f"{metrics['accuracy']:.1%}", "Accuracy"),
+        (f"{metrics['precision']:.1%}", "Precision"),
+        (f"{metrics['recall']:.1%}", "Recall"),
+        (f"{metrics['f1']:.3f}", "F1 score"),
+    ]
+    cells = "".join(
+        f'<div class="stat"><b>{value}</b><span>{label}</span></div>'
+        for value, label in stats
+    )
+    return f'<div class="stat-row">{cells}</div>'
