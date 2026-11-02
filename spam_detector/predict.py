@@ -43,3 +43,11 @@ class SpamDetector:
             word: base_score - score
             for word, score in zip(unique, self._scores(without))
         }
+
+    def predict(self, text: str) -> Prediction:
+        if not text.strip():
+            raise ValueError("Message is empty")
+        cleaned = clean_text(text)
+        score = self._scores([cleaned])[0]
+        signals = self._signals(cleaned, score) if cleaned else {}
+        return Prediction(score >= SPAM_THRESHOLD, score, signals)
