@@ -31,3 +31,19 @@ def candidate_models() -> dict[str, BaseEstimator]:
 def build_pipeline(estimator: BaseEstimator) -> Pipeline:
     """Keep TF-IDF inside the pipeline so it only ever learns from training folds."""
     return Pipeline([("tfidf", TfidfVectorizer()), ("model", estimator)])
+
+
+def compare_models(
+    texts: pd.Series, targets: pd.Series, folds: int = CV_FOLDS
+) -> pd.DataFrame:
+    """Cross-validate every candidate and return one row per model."""
+    splitter = StratifiedKFold(n_splits=folds, shuffle=True, random_state=RANDOM_STATE)
+    rows = []
+    for name, estimator in candidate_models().items():
+        scores = cross_validate(
+            build_pipeline(estimator), texts, targets, cv=splitter, scoring=SCORING
+        )
+        row = {"model": name}
+        row.update({metric: scores[f"test_{metric}"].mean() for metric in SCORING})
+        rows.append(row)
+    return pd.DataFrame(rows)
