@@ -33,3 +33,13 @@ class SpamDetector:
         if hasattr(self.pipeline, "predict_proba"):
             return self.pipeline.predict_proba(cleaned)[:, 1].tolist()
         return expit(self.pipeline.decision_function(cleaned)).tolist()
+
+    def _signals(self, cleaned: str, base_score: float) -> dict[str, float]:
+        """How much the score drops when each word is left out."""
+        tokens = cleaned.split()
+        unique = list(dict.fromkeys(tokens))
+        without = [" ".join(t for t in tokens if t != word) for word in unique]
+        return {
+            word: base_score - score
+            for word, score in zip(unique, self._scores(without))
+        }
