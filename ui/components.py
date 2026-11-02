@@ -32,3 +32,22 @@ def highlight(text: str, signals: dict[str, float]) -> str:
         return html.escape(word)
 
     return "".join(mark(part) for part in re.finditer(r"[A-Za-z]+|[^A-Za-z]+", text))
+
+
+def verdict_card(text: str, prediction: Prediction) -> str:
+    kind = "spam" if prediction.is_spam else "safe"
+    stamp = "SPAM" if prediction.is_spam else "CLEAN"
+    percent = prediction.spam_score * 100
+    return f"""
+    <div class="result">
+      <div class="stamp {kind}">{stamp}</div>
+      <div class="score-label">SPAM SCORE</div>
+      <div class="score-value">{percent:.1f}%</div>
+      <div class="track"><div class="fill {kind}" style="width:{percent:.1f}%"></div></div>
+      <div class="bubble">{highlight(text, prediction.signals)}</div>
+      <div class="legend">
+        <mark class="up">Red</mark> words raised the score,
+        <mark class="down">green</mark> words lowered it.
+      </div>
+    </div>
+    """
