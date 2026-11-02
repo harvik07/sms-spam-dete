@@ -61,24 +61,46 @@ streamlit run app.py
 python -m pytest
 ```
 
+## Run with Docker
+
+```bash
+docker compose up -d --build
+```
+
+| Service    | URL                   | Purpose                   |
+|------------|-----------------------|---------------------------|
+| App        | http://localhost:8501 | Streamlit interface       |
+| Prometheus | http://localhost:9090 | Metrics and alerts        |
+| Grafana    | http://localhost:3000 | Dashboard, `admin`/`admin` |
+
+Open **SMS Spam Detector** in Grafana to see model scores, request counts, verdicts,
+latency, spam score and message length. Model scores come from the test set at training
+time, not live traffic, because live messages have no true labels. Set
+`GRAFANA_ADMIN_PASSWORD` before exposing Grafana beyond your machine.
+
 ## Project layout
 
 ```
 app.py              Streamlit app
-spam_detector/      Data, preprocessing, models, evaluation, inference
+spam_detector/      Data, preprocessing, models, evaluation, inference, metrics
 ui/                 Page styling and HTML components
 tests/              Unit and app tests
 data/raw/           SMS Spam Collection dataset
 models/             Trained pipeline and metrics
 reports/            Model comparison and charts
-.github/workflows/  CI: tests, then a full training run
+monitoring/         Prometheus rules and Grafana dashboard
+docs/               Step-by-step project workflow (PDF)
+Dockerfile          App image
+docker-compose.yml  App, Prometheus and Grafana stack
+.github/workflows/  CI: tests, full training run, Docker stack check
 ```
 
 ## Dataset
 
 [SMS Spam Collection](https://archive.ics.uci.edu/dataset/228/sms+spam+collection) from
 the UCI Machine Learning Repository, by Tiago A. Almeida and José María Gómez Hidalgo.
-It has 5,574 messages, 5,157 after removing duplicates.
+It has 5,574 messages. Removing duplicates leaves 5,171, and dropping 14 with no usable
+words leaves 5,157 for training and testing.
 
 ## Author
 

@@ -3,6 +3,7 @@ import json
 import pandas as pd
 import streamlit as st
 
+from spam_detector import monitoring
 from spam_detector.config import COMPARISON_PATH, FIGURES_DIR, METRICS_PATH
 from spam_detector.predict import SpamDetector
 from ui import components
@@ -46,9 +47,10 @@ def render_inspect(detector: SpamDetector) -> None:
     if st.button("Inspect message", type="primary", width="stretch"):
         message = st.session_state["message"]
         if not message.strip():
+            monitoring.REJECTED.inc()
             st.warning("Paste a message first.")
             return
-        prediction = detector.predict(message)
+        prediction = monitoring.predict_and_record(detector, message, "single")
         st.markdown(
             components.verdict_card(message, prediction), unsafe_allow_html=True
         )
@@ -62,9 +64,13 @@ def render_batch(detector: SpamDetector) -> None:
     if st.button("Inspect all", type="primary"):
         messages = [line.strip() for line in lines.splitlines() if line.strip()]
         if not messages:
+            monitoring.REJECTED.inc()
             st.warning("Add at least one message.")
             return
-        predictions = [detector.predict(message) for message in messages]
+        predictions = [
+            monitoring.predict_and_record(detector, message, "batch")
+            for message in messages
+        ]
         results = pd.DataFrame(
             {
                 "Verdict": ["Spam" if p.is_spam else "Clean" for p in predictions],
@@ -102,6 +108,7 @@ def main() -> None:
     st.markdown(components.masthead(), unsafe_allow_html=True)
 
     detector = load_detector()
+    monitoring.start_server(load_metrics())
     inspect, batch, report = st.tabs(["Inspect", "Batch", "Model report"])
     with inspect:
         render_inspect(detector)

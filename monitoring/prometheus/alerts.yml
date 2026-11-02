@@ -1,0 +1,26 @@
+groups:
+  - name: spam-detector
+    rules:
+      - alert: SpamDetectorDown
+        expr: up{job="spam-detector"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: The spam detector app is not responding to scrapes
+
+      - alert: SlowPredictions
+        expr: histogram_quantile(0.95, sum by (le) (rate(spam_prediction_latency_seconds_bucket[5m]))) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: 95% of predictions are taking longer than 1 second
+
+      - alert: UnusualSpamShare
+        expr: sum(rate(spam_predictions_total{verdict="spam"}[30m])) / sum(rate(spam_predictions_total[30m])) > 0.8
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: Over 80% of messages are flagged as spam, far above the training data

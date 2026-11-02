@@ -53,3 +53,41 @@ jobs:
           path: |
             models/metrics.json
             reports/
+
+  docker:
+    name: Docker and monitoring stack
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate compose file
+        run: docker compose config -q
+      - name: Validate Prometheus config and alerts
+        run: |
+          docker run --rm --entrypoint promtool \
+            -v "$PWD/monitoring/prometheus:/etc/prometheus:ro" \
+            prom/prometheus:v3.5.0 check config /etc/prometheus/prometheus.yml
+      - name: Start the stack
+        run: docker compose up -d --build --wait --wait-timeout 180
+      - name: Check every service responds
+        run: |
+          retry="--retry 15 --retry-delay 3 --retry-all-errors"
+          curl -fsS $retry localhost:8501/_stcore/health
+          curl -fsS $retry localhost:9090/-/ready
+          curl -fsS $retry localhost:3000/api/health
+      - name: Check Grafana loaded the dashboard
+        run: |
+          curl -fsS --retry 15 --retry-delay 3 --retry-all-errors -u admin:admin \
+            localhost:3000/api/dashboards/uid/sms-spam-detector > /dev/null
+      - name: Check Prometheus scrapes the app
+        run: |
+          for attempt in $(seq 1 20); do
+            if curl -fsS 'localhost:9090/api/v1/query?query=spam_model_test_score' | grep -q accuracy; then
+              exit 0
+            fi
+            sleep 5
+          done
+          exit 1
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs
