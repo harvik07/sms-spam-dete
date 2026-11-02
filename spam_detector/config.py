@@ -14,3 +14,8 @@ METRICS_PATH = MODELS_DIR / "metrics.json"
 REPORTS_DIR = ROOT_DIR / "reports"
 FIGURES_DIR = REPORTS_DIR / "figures"
 COMPARISON_PATH = REPORTS_DIR / "model_comparison.csv"
+
+RANDOM_STATE = 42
+TEST_SIZE = 0.2
+CV_FOLDS = 5
+SELECTION_METRIC = "f1"
