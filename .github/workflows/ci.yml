@@ -24,3 +24,32 @@ jobs:
         run: pip install -r requirements-dev.txt
       - name: Run unit tests
         run: python -m pytest -v
+
+  pipeline:
+    name: Train and evaluate
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+      - name: Run the full pipeline
+        run: python -m spam_detector.pipeline
+      - name: Check the model beats the baseline
+        run: |
+          python -c "
+          import json
+          metrics = json.load(open('models/metrics.json'))
+          assert metrics['accuracy'] > 0.9, metrics
+          "
+      - name: Upload training report
+        uses: actions/upload-artifact@v4
+        with:
+          name: training-report
+          path: |
+            models/metrics.json
+            reports/
