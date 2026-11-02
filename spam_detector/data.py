@@ -22,3 +22,8 @@ def load_raw(path: Path = RAW_DATA_PATH) -> pd.DataFrame:
         quoting=csv.QUOTE_NONE,
         encoding="latin-1",
     )
+
+
+def remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:
+    """Drop repeated messages so one cannot land in both train and test."""
+    return df.drop_duplicates(subset="text", keep="first").reset_index(drop=True)
