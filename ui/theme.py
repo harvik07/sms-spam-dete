@@ -43,5 +43,12 @@ html, body, [class*="st-"], .stApp { font-family: 'IBM Plex Sans', sans-serif; }
 }
 .stamp.spam { color: var(--spam); }
 .stamp.safe { color: var(--safe); }
+
+.score-label { font-family: 'IBM Plex Mono', monospace; font-size: .75rem; color: var(--muted); }
+.score-value { font-family: 'Fraunces', serif; font-size: 2.6rem; font-weight: 800; line-height: 1.1; }
+.track { height: 8px; background: var(--line); border-radius: 4px; margin: .75rem 0 1.25rem; }
+.fill { height: 100%; border-radius: 4px; }
+.fill.spam { background: var(--spam); }
+.fill.safe { background: var(--safe); }
 </style>
 """
