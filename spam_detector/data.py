@@ -27,3 +27,11 @@ def load_raw(path: Path = RAW_DATA_PATH) -> pd.DataFrame:
 def remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:
     """Drop repeated messages so one cannot land in both train and test."""
     return df.drop_duplicates(subset="text", keep="first").reset_index(drop=True)
+
+
+def add_features(df: pd.DataFrame) -> pd.DataFrame:
+    """Add the numeric target and the cleaned message text."""
+    df = df.copy()
+    df["target"] = df["label"].map(LABELS)
+    df["clean_text"] = df["text"].map(clean_text)
+    return df
