@@ -75,3 +75,22 @@ def render_batch(detector: SpamDetector) -> None:
         st.dataframe(results, width="stretch", hide_index=True)
         spam_count = (results["Verdict"] == "Spam").sum()
         st.caption(f"{spam_count} of {len(results)} flagged as spam.")
+
+
+def render_report() -> None:
+    metrics = load_metrics()
+    st.write(
+        f"Selected model: **{metrics['model']}**, default settings, measured on "
+        f"{metrics['test_size']} messages it never saw in training."
+    )
+    st.markdown(components.stat_row(metrics), unsafe_allow_html=True)
+
+    left, right = st.columns([3, 2])
+    left.image(str(FIGURES_DIR / "model_comparison.png"), caption="Model comparison")
+    right.image(str(FIGURES_DIR / "confusion_matrix.png"), caption="Test set results")
+
+    st.dataframe(
+        pd.read_csv(COMPARISON_PATH).round(3),
+        width="stretch",
+        hide_index=True,
+    )
