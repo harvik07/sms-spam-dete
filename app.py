@@ -54,3 +54,24 @@ def render_inspect(detector: SpamDetector) -> None:
         )
         if not prediction.signals:
             st.info("No recognizable words here, so this verdict is a weak guess.")
+
+
+def render_batch(detector: SpamDetector) -> None:
+    st.write("Check several messages at once, one per line.")
+    lines = st.text_area("Messages", key="batch", height=180)
+    if st.button("Inspect all", type="primary"):
+        messages = [line.strip() for line in lines.splitlines() if line.strip()]
+        if not messages:
+            st.warning("Add at least one message.")
+            return
+        predictions = [detector.predict(message) for message in messages]
+        results = pd.DataFrame(
+            {
+                "Verdict": ["Spam" if p.is_spam else "Clean" for p in predictions],
+                "Spam score": [round(p.spam_score, 3) for p in predictions],
+                "Message": messages,
+            }
+        )
+        st.dataframe(results, width="stretch", hide_index=True)
+        spam_count = (results["Verdict"] == "Spam").sum()
+        st.caption(f"{spam_count} of {len(results)} flagged as spam.")
