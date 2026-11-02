@@ -50,5 +50,13 @@ html, body, [class*="st-"], .stApp { font-family: 'IBM Plex Sans', sans-serif; }
 .fill { height: 100%; border-radius: 4px; }
 .fill.spam { background: var(--spam); }
 .fill.safe { background: var(--safe); }
+
+.bubble {
+  background: var(--paper); border-radius: 14px 14px 14px 2px;
+  padding: .85rem 1rem; line-height: 1.7; overflow-wrap: anywhere;
+}
+mark.up { background: var(--spam-soft); color: var(--spam); padding: .05rem .2rem; border-radius: 3px; }
+mark.down { background: var(--safe-soft); color: var(--safe); padding: .05rem .2rem; border-radius: 3px; }
+.legend { font-size: .8rem; color: var(--muted); margin-top: .6rem; }
 </style>
 """
