@@ -65,3 +65,12 @@ def stat_row(metrics: dict) -> str:
         for value, label in stats
     )
     return f'<div class="stat-row">{cells}</div>'
+
+
+def footer() -> str:
+    return """
+    <div class="footer">
+      Built by Harvik &middot;
+      <a href="https://github.com/harvik07/sms-spam-dete">Source on GitHub</a>
+    </div>
+    """
