@@ -20,3 +20,8 @@ def remove_stop_words(tokens: list[str]) -> list[str]:
 
 def stem(tokens: list[str]) -> list[str]:
     return [_stemmer.stem(token) for token in tokens]
+
+
+def clean_text(text: str) -> str:
+    """Apply the full cleaning chain and return a space-joined string."""
+    return " ".join(stem(remove_stop_words(tokenize(text))))
