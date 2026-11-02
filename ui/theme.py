@@ -63,5 +63,16 @@ mark.down { background: var(--safe-soft); color: var(--safe); padding: .05rem .2
 .stat { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: .85rem 1rem; }
 .stat b { display: block; font-family: 'Fraunces', serif; font-size: 1.6rem; }
 .stat span { font-size: .8rem; color: var(--muted); }
+
+.footer {
+  margin-top: 3rem; padding-top: .75rem; border-top: 1px solid var(--line);
+  font-size: .8rem; color: var(--muted);
+}
+.footer a { color: var(--accent); }
+
+@media (max-width: 640px) {
+  .masthead h1 { font-size: 2.2rem; }
+  .stat-row { grid-template-columns: repeat(2, 1fr); }
+}
 </style>
 """
