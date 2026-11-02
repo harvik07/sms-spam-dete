@@ -58,5 +58,10 @@ html, body, [class*="st-"], .stApp { font-family: 'IBM Plex Sans', sans-serif; }
 mark.up { background: var(--spam-soft); color: var(--spam); padding: .05rem .2rem; border-radius: 3px; }
 mark.down { background: var(--safe-soft); color: var(--safe); padding: .05rem .2rem; border-radius: 3px; }
 .legend { font-size: .8rem; color: var(--muted); margin-top: .6rem; }
+
+.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: .75rem; margin-bottom: 1.25rem; }
+.stat { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: .85rem 1rem; }
+.stat b { display: block; font-family: 'Fraunces', serif; font-size: 1.6rem; }
+.stat span { font-size: .8rem; color: var(--muted); }
 </style>
 """
