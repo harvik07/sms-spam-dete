@@ -35,3 +35,13 @@ def add_features(df: pd.DataFrame) -> pd.DataFrame:
     df["target"] = df["label"].map(LABELS)
     df["clean_text"] = df["text"].map(clean_text)
     return df
+
+
+def split(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Stratified train/test split, so both keep the same spam ratio."""
+    return train_test_split(
+        df,
+        test_size=TEST_SIZE,
+        random_state=RANDOM_STATE,
+        stratify=df["target"],
+    )
