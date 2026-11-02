@@ -1,0 +1,19 @@
+{
+  "model": "Support Vector Machine",
+  "train_size": 4125,
+  "test_size": 1032,
+  "accuracy": 0.9786821705426356,
+  "precision": 0.990990990990991,
+  "recall": 0.8396946564885496,
+  "f1": 0.9090909090909091,
+  "confusion_matrix": [
+    [
+      900,
+      1
+    ],
+    [
+      21,
+      110
+    ]
+  ]
+}
