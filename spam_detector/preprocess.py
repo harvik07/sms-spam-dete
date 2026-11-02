@@ -11,7 +11,7 @@ _stemmer = PorterStemmer()
 
 def tokenize(text: str) -> list[str]:
     """Lowercase the text and keep alphabetic words only."""
-    return _WORD_PATTERN.findall(text.lower())
+    return _WORD_PATTERN.findall(text)
 
 
 def remove_stop_words(tokens: list[str]) -> list[str]:
