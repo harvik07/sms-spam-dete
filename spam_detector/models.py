@@ -26,3 +26,8 @@ def candidate_models() -> dict[str, BaseEstimator]:
         "Decision Tree": DecisionTreeClassifier(random_state=RANDOM_STATE),
         "K-Nearest Neighbors": KNeighborsClassifier(),
     }
+
+
+def build_pipeline(estimator: BaseEstimator) -> Pipeline:
+    """Keep TF-IDF inside the pipeline so it only ever learns from training folds."""
+    return Pipeline([("tfidf", TfidfVectorizer()), ("model", estimator)])
