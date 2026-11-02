@@ -26,3 +26,19 @@ def plot_model_comparison(comparison: pd.DataFrame, path: Path) -> None:
     fig.tight_layout()
     fig.savefig(path, dpi=150)
     plt.close(fig)
+
+
+def plot_confusion_matrix(matrix: list[list[int]], path: Path) -> None:
+    labels = ["Ham", "Spam"]
+    fig, ax = plt.subplots(figsize=(4.5, 4))
+    ax.imshow(matrix, cmap="Oranges")
+    for row, values in enumerate(matrix):
+        for col, value in enumerate(values):
+            ax.text(col, row, value, ha="center", va="center", color=INK, fontsize=14)
+    ax.set_xticks([0, 1], labels)
+    ax.set_yticks([0, 1], labels)
+    ax.set_xlabel("Predicted")
+    ax.set_ylabel("Actual")
+    fig.tight_layout()
+    fig.savefig(path, dpi=150)
+    plt.close(fig)
