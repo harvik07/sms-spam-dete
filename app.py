@@ -94,3 +94,23 @@ def render_report() -> None:
         width="stretch",
         hide_index=True,
     )
+
+
+def main() -> None:
+    st.set_page_config(page_title="SMS Spam Detector", page_icon="📨")
+    st.markdown(CSS, unsafe_allow_html=True)
+    st.markdown(components.masthead(), unsafe_allow_html=True)
+
+    detector = load_detector()
+    inspect, batch, report = st.tabs(["Inspect", "Batch", "Model report"])
+    with inspect:
+        render_inspect(detector)
+    with batch:
+        render_batch(detector)
+    with report:
+        render_report()
+
+    st.markdown(components.footer(), unsafe_allow_html=True)
+
+
+main()
