@@ -31,5 +31,17 @@ html, body, [class*="st-"], .stApp { font-family: 'IBM Plex Sans', sans-serif; }
   line-height: 1.05; margin: .25rem 0 .5rem; padding: 0; color: var(--ink);
 }
 .masthead p { color: var(--muted); margin: 0; }
+
+.result {
+  position: relative; background: var(--card); border: 1px solid var(--line);
+  border-radius: 6px; padding: 1.5rem; margin-top: 1rem; overflow: hidden;
+}
+.stamp {
+  position: absolute; top: 1.1rem; right: 1.25rem; transform: rotate(-6deg);
+  font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 1.15rem;
+  letter-spacing: .12em; padding: .25rem .7rem; border: 3px solid currentColor; border-radius: 4px;
+}
+.stamp.spam { color: var(--spam); }
+.stamp.safe { color: var(--safe); }
 </style>
 """
